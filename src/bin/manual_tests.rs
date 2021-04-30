@@ -36,7 +36,7 @@ pub fn main() -> Result<(), IBKRApiLibError> {
     //use port 7497 for TWS or 4002 for IB Gateway, depending on the port you have set
     app.lock()
         .expect("EClient mutex was poisoned")
-        .connect("127.0.0.1", 4002, 0)?;
+        .connect("127.0.0.1", 7497, 0)?;
 
     thread::sleep(Duration::new(2, 0));
 

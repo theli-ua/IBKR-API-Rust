@@ -264,7 +264,11 @@ where
         }
         info!("Disconnect requested.  Shutting down stream...");
         self.disconnect_requested.store(true, Ordering::Release);
-        self.stream.as_mut().unwrap().shutdown(Shutdown::Both)?;
+        if let Err(e) = self.stream.as_mut().unwrap().shutdown(Shutdown::Both) {
+            if e.kind() != std::io::ErrorKind::NotConnected {
+                return Err(e.into());
+            }
+        }
         *self.conn_state.lock().expect(POISONED_MUTEX) = ConnStatus::DISCONNECTED;
         Ok(())
     }
